@@ -15,13 +15,15 @@ class SendEmailView(APIView):
         serializer.is_valid(raise_exception=True)
         email=serializer.validated_data['email']
         cr=TimePassword.objects.create(email=email)
+        code=cr.set_reset_code()
 
 
         full_message = f"""
         Sizga django tomonidan xabar yuborildi:
-        password: {cr.time_password}
+        password: {code}
         """
         send_mail(
+            subject="Tasdiqlash kodi",
             message=full_message,
             from_email="mtosh662@gmail",
             recipient_list=[f"{email}"],  # Yuboriladigan email
@@ -40,11 +42,14 @@ class ChackEmailView(APIView):
         password=serializer.validated_data['password']
 
         try:
-            cr=TimePassword.objects.filter(email=email,time_password=password)
+            cr = TimePassword.objects.get(email=email, time_password=password)
         except TimePassword.DoesNotExist:
-            return Response({'error': 'Kod noto‘g‘ri yoki email topilmadi'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'error': 'Kod noto‘g‘ri yoki email topilmadi'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-        cr.is_bool=True
+        cr.is_bool = True
         cr.save()
 
-        return Response(data=serializer.data,status=status.HTTP_201_CREATED)
+        return Response({'message': 'Email muvaffaqiyatli tasdiqlandi'}, status=status.HTTP_200_OK)

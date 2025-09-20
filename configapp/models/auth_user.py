@@ -36,7 +36,7 @@ class User(AbstractBaseUser,PermissionsMixin):
 
     objects=CustomUserManager()
 
-    USERNAME_FIELD='email'
+    USERNAME_FIELD='phone'
     REQUIRED_FIELDS = []
 
 
@@ -57,7 +57,7 @@ class User(AbstractBaseUser,PermissionsMixin):
 
 
 class TimePassword(models.Model):
-    email=models.EmailField()
+    email = models.EmailField()
     time_password = models.CharField(max_length=5)
     is_bool = models.BooleanField(default=False)
     code_created_at = models.DateTimeField(blank=True, null=True)
@@ -65,14 +65,15 @@ class TimePassword(models.Model):
     def __str__(self):
         return f"{self.email} - {self.is_bool}"
 
-
     def set_reset_code(self):
         code = str(random.randint(10000, 99999))
         self.time_password = code
+        self.code_created_at = timezone.now()
         self.save()
         return code
 
     def is_code_valid(self, code):
+        """Kod to‘g‘ri va 5 daqiqadan oshmagan bo‘lsa True qaytaradi"""
         if self.time_password != code:
             return False
         if not self.code_created_at:

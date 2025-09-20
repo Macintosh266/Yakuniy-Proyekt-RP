@@ -32,5 +32,11 @@ class FAddStudentSerializer(serializers.ModelSerializer):
         model=Students
         fields=['full_name','group','user','discription','is_line','address']
 
-    def create(self,validated_data):
-        pass
+    def create(self, validated_data):
+        user_data = validated_data.pop("user")  # Extract nested user data
+        user_serializer = AddUserSerializer(data=user_data)
+        user_serializer.is_valid(raise_exception=True)
+        user = user_serializer.save()  # Create the user
+
+        student = Students.objects.create(user=user, **validated_data)  # Create student linked to user
+        return student

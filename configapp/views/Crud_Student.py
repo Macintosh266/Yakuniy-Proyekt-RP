@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from yaml import serialize_all
-from configapp.serializers.student_seralizer import StudentSerializer
+from configapp.serializers.student_seralizer import *
 from rest_framework.viewsets import ModelViewSet
 from configapp.models.auth_user import User
 from configapp.models.studentsmodel import *
@@ -19,7 +19,7 @@ from rest_framework.response import Response
 
 class StudentView(ModelViewSet):
     queryset = Students.objects.all()
-    serializer_class = StudentSerializer
+    serializer_class = FAddStudentSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = StudentSerializer(data=request.data)
