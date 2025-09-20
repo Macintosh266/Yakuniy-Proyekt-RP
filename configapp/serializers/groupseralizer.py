@@ -32,7 +32,7 @@ class TableSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializers(serializers.ModelSerializer):
-    # table=TableSerializer()
+    table=TableSerializer()
     table = serializers.PrimaryKeyRelatedField(queryset=Table.objects.all())
 
     class Meta:

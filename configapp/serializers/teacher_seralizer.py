@@ -13,6 +13,7 @@ class AddUserSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
         fields=['phone','email','password','is_active','is_teacher','is_student','is_admin']
+        ref_name='TeacherAddUserSerializer'
 
 class AddTeacherSerializer(serializers.ModelSerializer):
     user=AddUserSerializer()
@@ -24,6 +25,7 @@ class AddTeacherSerializer(serializers.ModelSerializer):
 class STeacherSerializer(serializers.Serializer):
     user=AddUserSerializer()
     teacher=AddTeacherSerializer()
+
 
 
 class FTeacherSerializer(serializers.ModelSerializer):

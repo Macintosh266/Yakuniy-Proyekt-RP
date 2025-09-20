@@ -10,16 +10,13 @@ class AddUserSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
         fields=['phone','email','password','is_active','is_teacher','is_student','is_admin']
+        ref_name = "StudentAddUserSerializer"
 
 class AddStudentSerializer(serializers.ModelSerializer):
-    user=AddUserSerializer(
-
-    )
+    user=AddUserSerializer()
     class Meta:
         model=Students
         fields=['full_name','group','user','discription','is_line','address']
-        # read_only_fields=['user']
-
 
 class StudentSerializer(serializers.Serializer):
     users=AddUserSerializer()

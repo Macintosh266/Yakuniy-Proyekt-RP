@@ -9,12 +9,33 @@ from rest_framework.viewsets import ModelViewSet
 from configapp.models.auth_user import *
 from configapp.serializers.email_seralizer import *
 
+class RegisterTeacher(APIView):
+    @swagger_auto_schema(request_body=AddUserSerializer)
+    def post(self,request):
+        serializer=AddUserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email=serializer.validated_data['email']
+
+        tp = TimePassword.objects.filter(email=email).first()
+        if tp is None:
+            return Response(
+                {"error": "Bu email uchun OTP yuborilmagan"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        if tp.is_bool==False:
+            return Response({"error": "Email OTP orqali tasdiqlanmagan"}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer.save()
+        tp.delete()
+        return Response(data=serializer.data,status=status.HTTP_201_CREATED)
 
 class TeacherView(APIView):
     # @swagger_auto_schema(request_body=FTeacherSerializer)
     # def post(self,request):
     #     serializer=FTeacherSerializer(data=request.data)
     #     serializer.is_valid()
+    #
     #
     #
     #     try:

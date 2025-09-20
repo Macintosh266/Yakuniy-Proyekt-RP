@@ -11,11 +11,12 @@ router.register(r'Group', CrudGroupView, basename='group-create')
 
 
 urlpatterns=[
-    # path('', include(router.urls)),
+    path('', include(router.urls)),
+    path('register/teacher/',RegisterTeacher.as_view(),name='register_teacher'),
     path('crud/teacher/', TeacherView.as_view(), name='teacher_list_create'),
     path('crud/teacher/<int:pk>/', TeacherView.as_view(), name='teacher_detail'),
     # path('crud/student/', StudentView.as_view(), name='student_list_create'),
     # path('crud/student/<int:pk>/', StudentView.as_view(), name='student_detail'),
-    path('send/code', SendEmailView.as_view(), name='send_code'),
-    path('chack/code',ChackEmailView.as_view(),name='check_code'),
+    path('code/send/', SendEmailView.as_view(), name='send_code'),
+    path('code/chack/',ChackEmailView.as_view(),name='check_code'),
 ]
