@@ -11,7 +11,11 @@ from configapp.models.studentsmodel import *
 from rest_framework.response import Response
 
 
+# class StudentView(APIView):
+#     @swagger_auto_schema(request_body=StudentSerializer)
+#     def post(self,request):
 
+        
 
 class StudentView(ModelViewSet):
     queryset = Students.objects.all()
@@ -37,4 +41,3 @@ class StudentView(ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-        
