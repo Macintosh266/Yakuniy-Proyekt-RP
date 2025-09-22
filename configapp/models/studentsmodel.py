@@ -1,6 +1,6 @@
 from django.db import models
 from .auth_user import *
-from .groupsmodel import *
+from .groupsmodel import Group
 
 
 

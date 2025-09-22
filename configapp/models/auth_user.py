@@ -15,29 +15,33 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self,username,password,**extra_fields):
+    def create_superuser(self,phone,password,**extra_fields):
         extra_fields.setdefault('is_admin',True)
         extra_fields.setdefault('is_active',True)
+        extra_fields.setdefault('is_staff',True)
 
         if extra_fields.get('is_admin') is not True:
             return ValueError("Sizda is_admin==True b'olishi kerak")
         if extra_fields.get('is_active') is not True:
-            return ValueError()
+            return ValueError("Siz activ emasiz")
+        if extra_fields.get('is_staff') is not True:
+            return ValueError("Sizda is_staff==True b'olishi kerak")
 
-        return  self.create_user(username,password,**extra_fields)
+        return  self.create_user(phone,password,**extra_fields)
 
 class User(AbstractBaseUser,PermissionsMixin):
     phone=models.CharField(max_length=13,unique=True)
-    email = models.CharField(max_length=50, null=True)
+    email = models.CharField(max_length=50, unique=True)
     is_active=models.BooleanField(default=True)
     is_admin=models.BooleanField(default=False)
     is_teacher=models.BooleanField(default=False)
     is_student=models.BooleanField(default=False)
+    is_staff=models.BooleanField(default=False)
 
     objects=CustomUserManager()
 
     USERNAME_FIELD='phone'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['email']
 
 
 
