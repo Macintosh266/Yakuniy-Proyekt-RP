@@ -1,6 +1,7 @@
 from django import views
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 from yaml import serialize_all
@@ -18,7 +19,7 @@ from django.core.mail import send_mail
 
 
 class StudentRegister(APIView):
-    permission_classes = [IsAdminPermission]
+    permission_classes = [IsAdminPermission,IsAuthenticated]
 
     @swagger_auto_schema(request_body=FAddStudentSerializer)
     def post(self, request):
@@ -27,16 +28,13 @@ class StudentRegister(APIView):
 
         user_data = serializer.validated_data.get("user")
         email = user_data.get("email")
-        raw_password = user_data.get("password")   # oddiy parol
+        raw_password = user_data.get("password")
 
-        # Avval student va userni yaratamiz
         student = serializer.save()
 
-        # Endi foydalanuvchi parolini xashlab saqlash
         student.user.set_password(raw_password)
         student.user.save()
 
-        # Email jo‘natish
         full_message = f"""
         Sizga Django tomonidan xabar yuborildi:
         email: {email}
@@ -45,7 +43,7 @@ class StudentRegister(APIView):
         send_mail(
             subject="Tasdiqlash kodi",
             message=full_message,
-            from_email="mtosh662@gmail.com",  # .com yozilishi kerak
+            from_email="mtosh662@gmail.com",
             recipient_list=[email],
         )
 
@@ -53,6 +51,7 @@ class StudentRegister(APIView):
 
 
 class StudentChangePassword(APIView):
+    permission_classes = [IsAuthenticated]
     @swagger_auto_schema(request_body=StudentChangePasswordSerializer)
     def post(self, request):
         serializer = StudentChangePasswordSerializer(data=request.data)
@@ -68,37 +67,6 @@ class StudentChangePassword(APIView):
 
 
 class StudentView(ModelViewSet):
-    permission_classes=[IsStudentPermission]
+    permission_classes=[IsStudentPermission,IsAuthenticated]
     serializer_class = AddStudentSerializer
     queryset = Students.objects.all()
-
-
-
-    # def get(self, request):
-    #     student = Students.objects.all()
-    #     serialiser = AddStudentSerializer(student, many=True)
-    #     return Response(data=serialiser.data, status=status.HTTP_200_OK)
-    #
-    # @swagger_auto_schema(request_body=FAddStudentSerializer)
-    # def patch(self, request, pk):
-    #     student = get_object_or_404(Students, pk=pk)
-    #     serializer = FAddStudentSerializer(student, data=request.data, partial=True)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-    #     return Response(data={'success': True, 'data': serializer.data}, status=status.HTTP_201_CREATED)
-    #
-    # @swagger_auto_schema(request_body=AddStudentSerializer)
-    # def put(self, request, pk):
-    #     student = get_object_or_404(Students, pk=pk)
-    #     serializer = AddStudentSerializer(student, data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-    #     return Response(data={'success': True, 'data': serializer.data}, status=status.HTTP_201_CREATED)
-    #
-    # def delete(self, request, pk):
-    #     student = get_object_or_404(Students, pk=pk)
-    #     student.delete()
-    #     return Response(data={'message': "Malumot o'chirildi"}, status=status.HTTP_204_NO_CONTENT)
-
-
-

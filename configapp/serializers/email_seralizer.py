@@ -12,5 +12,5 @@ class ChackMassageSerializer(serializers.Serializer):
 
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField() 
+    email = serializers.EmailField()
     password = serializers.CharField(max_length=20)

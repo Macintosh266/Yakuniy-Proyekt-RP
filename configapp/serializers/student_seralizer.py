@@ -32,7 +32,6 @@ class FAddStudentSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")
-        user_data["is_active"] = False 
         user_serializer = AddUserSerializer(data=user_data)
         user_serializer.is_valid(raise_exception=True)
         user = user_serializer.save() 

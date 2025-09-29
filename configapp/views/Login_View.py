@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
-from configapp.models.auth_user import User
+from configapp.models.auth_user import *
 from configapp.serializers.email_seralizer import LoginSerializer
 from rest_framework import status
 from rest_framework.response import Response
@@ -17,13 +17,26 @@ class LoginView(APIView):
         password = serializer.validated_data['password']
 
         user = User.objects.filter(email=email).first()
+
+        if user.is_student:
+            tp = TimePassword.objects.filter(email=email).first()
+            if tp is None:
+                return Response(
+                    {"error": "Bu email uchun OTP yuborilmagan"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            if not tp.is_bool:
+                return Response({"error": "Email OTP orqali tasdiqlanmagan"}, status=status.HTTP_400_BAD_REQUEST)
         if not user:
             return Response(
                 data={"success": False, "message": "Login ma'lumotlari noto'g'ri"},
                 status=status.HTTP_401_UNAUTHORIZED)
         if not user.check_password(password):
             return Response(data={'success': False, 'message': "Parol noto'g'ri"}, status=status.HTTP_400_BAD_REQUEST)
-        
+
+
+
 
         
         token = get_tokens_for_user(user)

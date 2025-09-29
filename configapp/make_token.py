@@ -7,5 +7,6 @@ def get_tokens_for_user(user):
     return {
         'refresh': str(refresh),
         'access': str(refresh.access_token),
-        'is_admin':user.is_admin
+        'is_admin':user.is_admin,
+        'is_student':user.is_student
     }

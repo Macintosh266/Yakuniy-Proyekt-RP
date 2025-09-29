@@ -2,8 +2,6 @@ from rest_framework import serializers
 from configapp.models.teachersmodel import *
 
 
-
-
 class AddUserSerializer(serializers.ModelSerializer):
     is_active=serializers.BooleanField(read_only=True)
     is_teacher=serializers.BooleanField(read_only=True)
@@ -16,7 +14,7 @@ class AddUserSerializer(serializers.ModelSerializer):
         ref_name='TeacherAddUserSerializer'
 
 class AddTeacherSerializer(serializers.ModelSerializer):
-    user=AddUserSerializer()
+    # user=AddUserSerializer()
     class Meta:
         model=Teacher
         fields = ['full_name','discription']
