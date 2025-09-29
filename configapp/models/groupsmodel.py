@@ -34,6 +34,8 @@ class Table(models.Model):
     description=models.CharField(max_length=300,blank=True,null=True)
 
 
+
+
 class Group(models.Model):
     title=models.CharField(max_length=50)
     course=models.ForeignKey(Course, related_name='get_course',on_delete=models.RESTRICT)

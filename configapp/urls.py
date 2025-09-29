@@ -10,11 +10,14 @@ router.register(r'Teacher',TeacherView)
 router.register(r'News',NewsViews)
 router.register(r'NewsPhoto',NewsPhotoViews)
 router.register(r'Staff',ManagerOrganizationView)
+router.register(r'Attendance',AttendanceView,basename='attendance-view')
 
 
 
 urlpatterns=[
     path('./', include(router.urls)),
+    path('attendance/<int:pk>/level',AttendanceLevelView.as_view(),name='attendance_level'),
+    path('check/<int:pk>/group/',CheckGroup.as_view(),name='check_group'),
     path('login/', LoginView.as_view(), name='login'),
     path('register/student/', StudentRegister.as_view(), name='register_student'),
     path('change/password/', StudentChangePassword.as_view(), name='change_password'),
