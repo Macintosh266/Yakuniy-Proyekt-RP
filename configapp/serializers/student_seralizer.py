@@ -17,7 +17,8 @@ class AddUserSerializer(serializers.ModelSerializer):
 class AddStudentSerializer(serializers.ModelSerializer):
     class Meta:
         model=Students
-        fields=['full_name','group','user','discription','is_line','address']
+        fields=['id','full_name','group','user','discription','is_line','address']
+        read_only_fields=['id']
 
 class StudentSerializer(serializers.Serializer):
     users=AddUserSerializer()
@@ -48,3 +49,33 @@ class StudentChangePasswordSerializer(serializers.Serializer):
         if attrs.get("new_password") != attrs.get("confirm_password"):
             raise serializers.ValidationError("Parollar bir xil emas")
         return attrs
+
+
+class StudentListSerializer(serializers.ListSerializer):
+    """Bir nechta studentni update qilish uchun custom serializer"""
+    def update(self, instances, validated_data):
+        # instances -> querysetdagi studentlar
+        # validated_data -> request.data'dan kelgan list
+        student_mapping = {student.id: student for student in instances}
+        data_mapping = {item['id']: item for item in validated_data}
+
+        updated_students = []
+        for student_id, data in data_mapping.items():
+            student = student_mapping.get(student_id)
+            if student:
+                for attr, value in data.items():
+                    setattr(student, attr, value)
+                student.save()
+                updated_students.append(student)
+
+        return updated_students
+
+
+class CheckSerializerStudent(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = Students
+        fields = ['id', 'is_line']  # faqat shu maydonni yangilaymiz
+        read_only_fields = ['full_name', 'group', 'user', 'discription', 'address']
+        list_serializer_class = StudentListSerializer

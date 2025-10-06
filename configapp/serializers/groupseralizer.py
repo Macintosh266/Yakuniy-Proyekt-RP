@@ -47,3 +47,8 @@ class GroupSerializers(serializers.ModelSerializer):
 
         group = Group.objects.create(table=table, **validated_data)
         return group
+
+class UpdateTableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Table
+        fields=['is_started']

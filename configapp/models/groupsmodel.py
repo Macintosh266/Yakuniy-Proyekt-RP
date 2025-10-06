@@ -29,6 +29,7 @@ class Rooms(models.Model):
 class Table(models.Model):
     start_time=models.TimeField()
     end_time=models.TimeField()
+    is_started=models.BooleanField(default=False)
     room=models.ForeignKey(Rooms, on_delete=models.RESTRICT,related_name='room')
     type=models.ForeignKey(TableType, on_delete=models.RESTRICT,related_name='type')
     description=models.CharField(max_length=300,blank=True,null=True)
@@ -49,5 +50,6 @@ class Group(models.Model):
     discription=models.CharField(max_length=300,blank=True,null=True)
 
 
+
     def __str__(self):
-        return self.title
+         return self.title

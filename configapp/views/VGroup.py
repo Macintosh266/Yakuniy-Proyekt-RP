@@ -1,30 +1,30 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
-from sqlparse.engine.grouping import group
-from ..add_permission import *
-from ..models import *
-from ..serializers import *
-
+from drf_yasg.utils import swagger_auto_schema
+from ..models import Students
+from ..serializers import AddStudentSerializer, CheckSerializerStudent
+from ..add_permission import IsAdminPermission
 
 class CheckGroup(APIView):
-    def get(self,request,pk):
-        groups=Students.objects.filter(group=pk)
-        serializer=AddStudentSerializer(groups,many=True)
-        return Response(data=serializer.data,status=status.HTTP_200_OK)
+    permission_classes=[IsAdminPermission]
+    def get(self, request, pk):
+        groups = Students.objects.filter(group=pk)
+        serializer = AddStudentSerializer(groups, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
-
-    def patch(self,request,pk):
-        groups=Students.objects.filter(group=pk)
-        serializer=AddStudentSerializer(groups,data=request.data, partial=True)
+    @swagger_auto_schema(request_body=CheckSerializerStudent(many=True))
+    def patch(self, request, pk):
+        groups = Students.objects.filter(group=pk)
+        serializer = CheckSerializerStudent(groups, data=request.data, many=True, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
 
-    def put(self,request,pk):
-        groups=Students.objects.filter(group=pk)
-        serializer=AddStudentSerializer(groups,data=request.data, partial=True)
+    @swagger_auto_schema(request_body=CheckSerializerStudent(many=True))
+    def put(self, request, pk):
+        groups = Students.objects.filter(group=pk)
+        serializer = CheckSerializerStudent(groups, data=request.data, many=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)

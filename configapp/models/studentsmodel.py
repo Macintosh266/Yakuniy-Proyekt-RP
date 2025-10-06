@@ -1,7 +1,8 @@
 from django.db import models
 from .auth_user import *
 from .groupsmodel import Group
-
+from django.utils import timezone
+from datetime import timedelta
 
 
 class Students(models.Model):
@@ -14,7 +15,22 @@ class Students(models.Model):
 
     def __str__(self):
         return self.full_name
-    
+
+    def save(self, *args, **kwargs):
+        if self.is_line and not self.is_line_set_at:
+            self.is_line_set_at = timezone.now()
+
+        if not self.is_line:
+            self.is_line_set_at = None
+
+        super().save(*args, **kwargs)
+
+    def is_line_valid(self):
+        """is_line True bo‘lib 12 soatdan oshgan bo‘lsa, False qaytaradi"""
+        if not self.is_line or not self.is_line_set_at:
+            return False
+        return timezone.now() - self.is_line_set_at < timedelta(hours=12)
+
 
 class Parent(models.Model):
     name=models.CharField(max_length=50)

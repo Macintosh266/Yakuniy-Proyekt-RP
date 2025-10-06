@@ -7,3 +7,4 @@ from ..serializers import *
 class ManagerOrganizationView(ModelViewSet):
     queryset = ManagerOrganization.objects.all()
     serializer_class = ManagerOrganizationSerializer
+
