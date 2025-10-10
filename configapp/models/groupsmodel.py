@@ -34,13 +34,15 @@ class Table(models.Model):
     type=models.ForeignKey(TableType, on_delete=models.RESTRICT,related_name='type')
     description=models.CharField(max_length=300,blank=True,null=True)
 
-
+    def __str__(self):
+        return self.type.title
 
 
 class Group(models.Model):
     title=models.CharField(max_length=50)
     course=models.ForeignKey(Course, related_name='get_course',on_delete=models.RESTRICT)
     teacher = models.ManyToManyField(Teacher, related_name='get_teacher')
+    # student=models.ManyToManyField(Students,related_name='student_get')
     table=models.ForeignKey(Table,on_delete=models.RESTRICT,related_name='get_table')
     created_at=models.DateField(auto_now_add=True)
     updated_at=models.DateField(auto_now=True)

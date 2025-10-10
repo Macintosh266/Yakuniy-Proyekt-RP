@@ -6,3 +6,4 @@ from .Login_View import *
 from .NewsView import *
 from .AttandanceView import *
 from .VGroup import *
+from .HomeworkView import *

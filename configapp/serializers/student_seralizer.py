@@ -40,7 +40,7 @@ class FAddStudentSerializer(serializers.ModelSerializer):
         student = Students.objects.create(user=user, **validated_data)
         return student
     
-class StudentChangePasswordSerializer(serializers.Serializer):
+class ChangePasswordSerializer(serializers.Serializer):
     old_password=serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
     confirm_password = serializers.CharField(required=True)

@@ -50,11 +50,11 @@ class StudentRegister(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class StudentChangePassword(APIView):
+class ChangePassword(APIView):
     permission_classes = [IsAuthenticated]
-    @swagger_auto_schema(request_body=StudentChangePasswordSerializer)
+    @swagger_auto_schema(request_body=ChangePasswordSerializer)
     def post(self, request):
-        serializer = StudentChangePasswordSerializer(data=request.data)
+        serializer = ChangePasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = request.user
         if not user.check_password(serializer.validated_data.get("old_password")):

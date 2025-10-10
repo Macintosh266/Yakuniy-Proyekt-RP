@@ -19,3 +19,4 @@ class AttendanceLevelView(APIView):
         level=AttendanceLevel.objects.filter(pk=pk)
         serializer=AttendanceLevelSerializer(level,many=True)
         return Response(data=serializer.data,status=status.HTTP_200_OK)
+

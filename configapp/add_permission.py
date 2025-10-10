@@ -40,6 +40,6 @@ class IsTeacherPermission(BasePermission):
 
 class IsNewsPermission(BasePermission):
     def has_permission(self, request, view):
-        if request.user and (request.user.is_staff or request.user.is_admin):
+        if request.user and (request.user.is_staff or getattr(request.user, 'is_admin', False)):
             return True
-        return request.method in SAFE_METHODS
+        return request.method in ['GET']

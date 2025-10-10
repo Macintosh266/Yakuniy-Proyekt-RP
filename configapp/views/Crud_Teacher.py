@@ -39,7 +39,7 @@ class TeacherView(ModelViewSet):
 
 
 class TeacherCheckLesson(APIView):
-    permission_classes=[IsTeacherPermission,IsAdminPermission]
+    # permission_classes=[IsTeacherPermission,IsAdminPermission]
     @swagger_auto_schema(request_body=UpdateTableSerializer)
     def put(self,request,pk):
         group=get_object_or_404(Group,pk=pk)
@@ -52,3 +52,6 @@ class TeacherCheckLesson(APIView):
             {'success': True, 'data': serializer.data},
             status=status.HTTP_200_OK
         )
+
+
+

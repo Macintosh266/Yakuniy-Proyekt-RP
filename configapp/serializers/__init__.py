@@ -6,3 +6,4 @@ from .student_seralizer import *
 from .email_seralizer import *
 from .teacher_seralizer import *
 from .groupseralizer import *
+from .homeworkserializer import *
