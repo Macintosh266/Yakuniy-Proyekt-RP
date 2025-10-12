@@ -34,7 +34,8 @@ class IsTeacherPermission(BasePermission):
         if getattr(user, "is_teacher", False) and user.is_active:
             # Faqat GET, PATCH, PUT so‘rovlariga ruxsat
             return request.method in ['GET', 'PATCH', 'PUT']
-        return False
+        else:
+            return request.method in ['GET']
 
 
 
@@ -43,3 +44,4 @@ class IsNewsPermission(BasePermission):
         if request.user and (request.user.is_staff or getattr(request.user, 'is_admin', False)):
             return True
         return request.method in ['GET']
+

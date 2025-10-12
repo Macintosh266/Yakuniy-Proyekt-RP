@@ -9,6 +9,7 @@ from ..models import *
 from ..add_permission import *
 from ..serializers import *
 
+
 class RegisterTeacher(APIView):
     @swagger_auto_schema(request_body=FTeacherSerializer)
     def post(self,request):
@@ -39,7 +40,7 @@ class TeacherView(ModelViewSet):
 
 
 class TeacherCheckLesson(APIView):
-    # permission_classes=[IsTeacherPermission,IsAdminPermission]
+    permission_classes=[IsTeacherPermission,IsAdminPermission]
     @swagger_auto_schema(request_body=UpdateTableSerializer)
     def put(self,request,pk):
         group=get_object_or_404(Group,pk=pk)

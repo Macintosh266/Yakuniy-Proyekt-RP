@@ -17,7 +17,7 @@ class SendEmailView(APIView):
         cr=TimePassword.objects.create(email=email)
         code=cr.set_reset_code()
 
-
+        print(code)
         full_message = f"""
         Sizga django tomonidan xabar yuborildi:
         password: {code}

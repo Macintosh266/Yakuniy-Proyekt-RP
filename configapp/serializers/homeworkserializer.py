@@ -17,4 +17,6 @@ class CheckHomeworkSerializer(serializers.ModelSerializer):
 class DoHomeworkSerializer(serializers.ModelSerializer):
     class Meta:
         model=HomeworkGet
-        fields=['submission_file','homework','student']
+        fields=['submission_file','homework','student','description']
+        read_only_fields=['student']
+

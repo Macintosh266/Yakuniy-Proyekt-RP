@@ -32,7 +32,9 @@ class StudentRegister(APIView):
 
         student = serializer.save()
 
+
         student.user.set_password(raw_password)
+        student.user.is_student = True
         student.user.save()
 
         full_message = f"""
@@ -40,6 +42,8 @@ class StudentRegister(APIView):
         email: {email}
         parol: {raw_password}
         """
+
+
         send_mail(
             subject="Tasdiqlash kodi",
             message=full_message,
@@ -67,6 +71,8 @@ class ChangePassword(APIView):
 
 
 class StudentView(ModelViewSet):
-    permission_classes=[IsStudentPermission,IsAuthenticated]
-    serializer_class = AddStudentSerializer
+    permission_classes=[IsAdminPermission,IsAuthenticated]
+    serializer_class = FAddStudentSerializer
     queryset = Students.objects.all()
+
+

@@ -8,7 +8,7 @@ class NewsViews(ModelViewSet):
     queryset = News.objects.all()
     serializer_class =NewsSerializer
 
-class NewsPhotoViews(ModelViewSet):
-    permission_classes = [IsNewsPermission]
-    queryset = NewsFotos.objects.all()
-    serializer_class = NewsPhotoSerializer
+# class NewsPhotoViews(ModelViewSet):
+#     permission_classes = [IsNewsPermission]
+#     queryset = NewsFotos.objects.all()
+#     serializer_class = NewsPhotoSerializer

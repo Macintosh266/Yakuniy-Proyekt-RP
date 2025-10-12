@@ -11,7 +11,10 @@ class Students(models.Model):
     group=models.ForeignKey(Group, on_delete=models.RESTRICT, related_name='get_group')
     discription=models.CharField(max_length=500,blank=True,null=True)
     is_line=models.BooleanField(default=False)
+    is_active=models.BooleanField(default=True)
     address=models.CharField(max_length=50)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
 
     def __str__(self):
         return self.full_name

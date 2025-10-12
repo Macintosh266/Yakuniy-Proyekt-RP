@@ -11,7 +11,7 @@ class AddUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=User
-        fields=['phone','email','password','is_active','is_teacher','is_student','is_admin']
+        fields=["username",'phone','email','password','is_active','is_teacher','is_student','is_admin']
         ref_name = "StudentAddUserSerializer"
 
 class AddStudentSerializer(serializers.ModelSerializer):
@@ -72,10 +72,10 @@ class StudentListSerializer(serializers.ListSerializer):
 
 
 class CheckSerializerStudent(serializers.ModelSerializer):
-    id = serializers.IntegerField()
-
+    id=serializers.IntegerField()
     class Meta:
         model = Students
         fields = ['id', 'is_line']  # faqat shu maydonni yangilaymiz
         read_only_fields = ['full_name', 'group', 'user', 'discription', 'address']
         list_serializer_class = StudentListSerializer
+

@@ -21,6 +21,7 @@ class HomeworkGet(models.Model):
     is_submitted = models.BooleanField(default=False)
     submission_file = models.FileField(upload_to='homework_submissions/', null=True, blank=True)
     submitted_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    description = models.TextField()
 
     def __str__(self):
         return f"{self.student.full_name} - {self.homework.title}"

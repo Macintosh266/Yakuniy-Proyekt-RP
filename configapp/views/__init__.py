@@ -7,3 +7,4 @@ from .NewsView import *
 from .AttandanceView import *
 from .VGroup import *
 from .HomeworkView import *
+from .MockView import *

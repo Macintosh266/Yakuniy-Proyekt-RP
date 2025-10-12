@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,18 +16,18 @@ class CheckGroup(APIView):
 
     @swagger_auto_schema(request_body=CheckSerializerStudent(many=True))
     def patch(self, request, pk):
-        groups = Students.objects.filter(group=pk)
-        serializer = CheckSerializerStudent(groups, data=request.data, many=True, partial=True)
+        students = Students.objects.filter(group=pk)
+        if not students.exists():
+            return Response({'detail': 'Hech qanday student topilmadi'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = CheckSerializerStudent(students, data=request.data, many=True, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema(request_body=CheckSerializerStudent(many=True))
     def put(self, request, pk):
-        groups = Students.objects.filter(group=pk)
-        serializer = CheckSerializerStudent(groups, data=request.data, many=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response({'success': True, 'data': serializer.data}, status=status.HTTP_200_OK)
+        Students.objects.filter(group=pk).update(is_line=True)
+        return Response({'success': True}, status=status.HTTP_200_OK)
+
 
 

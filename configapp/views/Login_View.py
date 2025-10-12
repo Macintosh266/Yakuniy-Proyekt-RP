@@ -12,12 +12,28 @@ class LoginView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
-        email = serializer.validated_data['email']
+
+        email = serializer.validated_data['email'].lower()
         password = serializer.validated_data['password']
 
         user = User.objects.filter(email=email).first()
 
+        # ✅ 1. Check if user exists
+        if not user:
+            return Response(
+                {"success": False, "message": "Login ma'lumotlari noto‘g‘ri"},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+
+        # ✅ 2. Check password
+        if not user.check_password(password):
+            return Response(
+                {"success": False, "message": "Parol noto‘g‘ri"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # ✅ 3. Check OTP if student
         if user.is_student:
             tp = TimePassword.objects.filter(email=email).first()
             if tp is None:
@@ -25,20 +41,15 @@ class LoginView(APIView):
                     {"error": "Bu email uchun OTP yuborilmagan"},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-
             if not tp.is_bool:
-                return Response({"error": "Email OTP orqali tasdiqlanmagan"}, status=status.HTTP_400_BAD_REQUEST)
-        if not user:
-            return Response(
-                data={"success": False, "message": "Login ma'lumotlari noto'g'ri"},
-                status=status.HTTP_401_UNAUTHORIZED)
-        if not user.check_password(password):
-            return Response(data={'success': False, 'message': "Parol noto'g'ri"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"error": "Email OTP orqali tasdiqlanmagan"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
 
-
-
-        
+        # ✅ 4. Create and return tokens
         token = get_tokens_for_user(user)
+        return Response(token, status=status.HTTP_200_OK)
 
-        return Response(data=token, status=status.HTTP_200_OK)
+

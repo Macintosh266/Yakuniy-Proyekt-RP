@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,7 +10,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 
 class GiveHomework(APIView):
-    # permission_classes = [IsTeacherPermission]
+    permission_classes = [IsTeacherPermission]
     @swagger_auto_schema(request_body=HomeworkSerializer)
     def post(self, request, group):
         groups = get_object_or_404(Group, id=group)
@@ -26,6 +27,7 @@ class GiveHomework(APIView):
 
 
 class CheckHomework(APIView):
+    permission_classes = [IsTeacherPermission]
     @swagger_auto_schema(request_body=CheckHomeworkSerializer)
     def put(self, request, group):
         homework = get_object_or_404(Homework, group=group)
@@ -46,11 +48,13 @@ class CheckHomework(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class DoHomework(APIView):
+    permission_classes = [IsStudentPermission]
     @swagger_auto_schema(request_body=DoHomeworkSerializer)
     def post(self, request,hw=None):
+        st=get_object_or_404(Students,user=request.user)
         serializer = DoHomeworkSerializer(data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        serializer.save(student=st)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get(self, request, hw):
