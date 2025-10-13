@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from ..serializers import *
 
 class StudentMonthMock(APIView):
-    permission_classes = [IsAuthenticated,IsAdminPermission]
+    # permission_classes = [IsAuthenticated,IsAdminPermission]
     def get(self, request,year):
         students = Students.objects.filter(created_at__year=year).annotate(month=TruncMonth('created_at')).values(
             'month').annotate(count=Count('id')).values(
@@ -26,6 +26,7 @@ class StudentMonthMock(APIView):
 
 
 class DataMock(APIView):
+    # permission_classes = [IsAuthenticated,IsAdminPermission]
     def get(self,request,date1,date2):
         student_true=Students.objects.filter(Q(created_at__gte=date1) & Q(created_at__lte=date2) & Q(
         is_active=True)).annotate(month=TruncMonth('created_at')).values(

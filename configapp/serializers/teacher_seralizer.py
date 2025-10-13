@@ -10,7 +10,7 @@ class AddUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=User
-        fields=['phone','email','password','is_active','is_teacher','is_student','is_admin']
+        fields=['username','phone','email','password','is_active','is_teacher','is_student','is_admin']
         ref_name='TeacherAddUserSerializer'
 
 class AddTeacherSerializer(serializers.ModelSerializer):
@@ -25,8 +25,21 @@ class STeacherSerializer(serializers.Serializer):
     teacher=AddTeacherSerializer()
 
 
+class CourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Course
+        fields='__all__'
+
+
+class DepartamentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Departmenrt
+        fields='__all__'
+
 
 class FTeacherSerializer(serializers.ModelSerializer):
+    course=CourseSerializer()
+    departament=DepartamentSerializer()
     user=AddUserSerializer()
 
     class Meta:
@@ -36,12 +49,20 @@ class FTeacherSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_db=validated_data.pop('user')
-        departments_db=validated_data.pop('department')
+        departments_db=validated_data.pop('departament')
         course_db=validated_data.pop('course')
         user_db['is_active']=True
         user_db['is_teacher']=True
         user=User.objects.create_user(**user_db)
         teacher=Teacher.objects.create(user=user,**validated_data)
-        teacher.departments.set(departments_db)
-        teacher.course.set(course_db)
+        courses=[]
+        for cour in course_db:
+            course, _ = Course.objects.get_or_create(**cour)
+            courses.append(course)
+        teacher.course.set(courses)
+        departments = []
+        for dep in departments_db:
+            department, _ = Departmenrt.objects.get_or_create(**dep)
+            departments.append(department)
+        teacher.department.set(departments)
         return teacher

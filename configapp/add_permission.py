@@ -33,7 +33,7 @@ class IsTeacherPermission(BasePermission):
         user = request.user
         if getattr(user, "is_teacher", False) and user.is_active:
             # Faqat GET, PATCH, PUT so‘rovlariga ruxsat
-            return request.method in ['GET', 'PATCH', 'PUT']
+            return request.method in ['GET','POST', 'PATCH', 'PUT']
         else:
             return request.method in ['GET']
 
