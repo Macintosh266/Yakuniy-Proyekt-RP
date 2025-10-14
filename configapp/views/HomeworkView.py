@@ -15,6 +15,8 @@ class GiveHomework(APIView):
     @swagger_auto_schema(request_body=HomeworkSerializer)
     def post(self, request, group):
         groups = get_object_or_404(Group, id=group)
+        if not groups.table.is_started:
+            return Response({'message': 'dars boshlanmagan'}, status=status.HTTP_400_BAD_REQUEST)
         serializer = HomeworkSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(group=groups)

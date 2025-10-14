@@ -51,6 +51,11 @@ class TeacherCheckLesson(APIView):
             {'success': True, 'data': serializer.data},
             status=status.HTTP_200_OK
         )
+    def get(self,request,pk):
+        group = get_object_or_404(Group, pk=pk)
+        table = group.table
+        serializer = UpdateTableSerializer(table, partial=True)
 
+        return Response(data=serializer.data,status=status.HTTP_200_OK)
 
 
