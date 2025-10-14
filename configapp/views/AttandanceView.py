@@ -13,11 +13,23 @@ class AttendanceView(ModelViewSet):
     serializer_class = AttendanceSerializer
 
 
+class AttendanceGroupView(APIView):
+    def get(self,request,group):
+        atten=Attendance.objects.filter(group=group)
+        serializer=AttendanceSerializer(atten,many=True)
+        return Response(data=serializer.data)
 
-class AttendanceLevelView(APIView):
-    def get(self,request,pk):
-        level=AttendanceLevel.objects.filter(pk=pk)
-        serializer=AttendanceLevelSerializer(level,many=True)
-        return Response(data=serializer.data,status=status.HTTP_200_OK)
+    @swagger_auto_schema(request_body=AttendanceSerializer)
+    def post(self,request,group=None):
+        serializer=AttendanceSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(data=serializer.data)
+
+
+
+class AttendanceLevelView(ModelViewSet):
+    queryset = AttendanceLevel.objects.all()
+    serializer_class = AttendanceLevelSerializer
 
 

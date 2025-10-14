@@ -17,7 +17,7 @@ class IsStudentPermission(BasePermission):
     def has_permission(self, request, view):
         user = request.user
         if not getattr(user, "is_student", False):
-            return False
+            return request.method in ['GET']
 
         if not user.is_active:
             self.message = "Avval parolni o‘zgartiring!"

@@ -48,7 +48,7 @@ class User(AbstractBaseUser,PermissionsMixin):
 
 
     def __str__(self):
-        return self.phone
+        return f"{self.email}-{self.id}"
 
     @property
     def is_superuser(self):

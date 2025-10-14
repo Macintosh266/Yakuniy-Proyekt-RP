@@ -1,5 +1,6 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -48,7 +49,7 @@ class CheckHomework(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 class DoHomework(APIView):
-    permission_classes = [IsStudentPermission]
+    permission_classes = [IsAuthenticated,IsStudentPermission]
     @swagger_auto_schema(request_body=DoHomeworkSerializer)
     def post(self, request,hw=None):
         st=get_object_or_404(Students,user=request.user)

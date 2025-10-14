@@ -11,10 +11,12 @@ class Students(models.Model):
     group=models.ForeignKey(Group, on_delete=models.RESTRICT, related_name='get_group')
     discription=models.CharField(max_length=500,blank=True,null=True)
     is_line=models.BooleanField(default=False)
-    is_active=models.BooleanField(default=True)
+    is_finish=models.BooleanField(default=False)
     address=models.CharField(max_length=50)
+    category=models.CharField(max_length=200,null=True,blank=True)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)
+
 
     def __str__(self):
         return self.full_name
@@ -46,4 +48,5 @@ class Parent(models.Model):
 
     def __str__(self):
         return self.name
+
 

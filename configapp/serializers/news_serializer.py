@@ -17,10 +17,14 @@ class NewsSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         images_data = validated_data.pop('images', [])
-        author = validated_data.get('author')
+        news = News.objects.create(**validated_data)
 
-        news = NewsFotos.objects.create(**validated_data)
+        # Avval rasmlar yaratamiz
+        image_objs = []
         for image_data in images_data:
-            NewsFotos.objects.create(news=news, **image_data)
+            image_obj = NewsFotos.objects.create(**image_data)
+            image_objs.append(image_obj)
 
+        # Keyin News bilan bog‘laymiz (ManyToMany uchun .set())
+        news.images.set(image_objs)
         return news

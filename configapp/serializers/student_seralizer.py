@@ -29,7 +29,7 @@ class FAddStudentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=Students
-        fields=['full_name','group','user','discription','is_line','address']
+        fields=['full_name','group','user','discription','is_line','is_finish','address']
 
     def create(self, validated_data):
         user_data = validated_data.pop("user")

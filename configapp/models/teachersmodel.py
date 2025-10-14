@@ -21,10 +21,10 @@ class Course(models.Model):
 
 class Teacher(models.Model):
     full_name=models.CharField(max_length=50)
-    departament=models.ManyToManyField(Departmenrt,related_name='get_departament')
+    departament=models.ForeignKey(Departmenrt,on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     discription=models.CharField(max_length=500,blank=True,null=True)
-    course=models.ManyToManyField(Course,related_name='course')
+    course=models.ForeignKey(Course,on_delete=models.CASCADE)
 
     def __str__(self):
         return self.full_name
