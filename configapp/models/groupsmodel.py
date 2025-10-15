@@ -26,6 +26,7 @@ class Rooms(models.Model):
         return self.title
 
 
+
 class Table(models.Model):
     start_time=models.TimeField()
     end_time=models.TimeField()
@@ -36,6 +37,8 @@ class Table(models.Model):
 
     def __str__(self):
         return self.type.title
+
+
 
 
 class Group(models.Model):
@@ -49,7 +52,6 @@ class Group(models.Model):
     end_date=models.DateField()
     is_active=models.BooleanField(default=True)
     discription=models.CharField(max_length=300,blank=True,null=True)
-
 
 
     def __str__(self):

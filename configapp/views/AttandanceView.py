@@ -14,6 +14,7 @@ class AttendanceView(ModelViewSet):
 
 
 class AttendanceGroupView(APIView):
+    permission_classes = [IsTeacherPermission]
     def get(self,request,group):
         atten=Attendance.objects.filter(group=group)
         serializer=AttendanceSerializer(atten,many=True)
@@ -29,6 +30,7 @@ class AttendanceGroupView(APIView):
 
 
 class AttendanceLevelView(ModelViewSet):
+    permission_classes = [IsAdminPermission]
     queryset = AttendanceLevel.objects.all()
     serializer_class = AttendanceLevelSerializer
 
