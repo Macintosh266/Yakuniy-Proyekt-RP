@@ -1,2 +1,21 @@
-/venv/
-/db.sqlite3/
+# Python va Django fayllari
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+
+# Virtual muhit
+venv/
+.env
+
+# Django media/static
+/staticfiles/
+/media/
+
+# IDE (PyCharm, VSCode va boshqalar)
+.vscode/
+.idea/
+
+# OS fayllari
+.DS_Store
+Thumbs.db
